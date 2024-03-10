@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image for the build stage
-FROM node:20-alpine as build
+FROM node:20-alpine as angular
 
 # Set the working directory in the container
 WORKDIR /app
@@ -11,22 +11,23 @@ COPY package*.json ./
 RUN npm install
 
 # Install Angular CLI globally
-RUN npm install -g @angular/cli
+# RUN npm install -g @angular/cli
 
 # Copy the entire project to the container
 COPY . .
 
 # Build the Angular app for production
-RUN ng build --prod
+RUN npm run build
 
 # Use a smaller, production-ready Nginx image as the final image
-FROM nginx:alpine
+FROM httpd:alpine
+WORKDIR /usr/local/apache2/htdocs
 
 # Copy the production-ready Angular app to the Nginx webserver's root directory
-COPY --from=build /app/dist/RentA-Car-FrontEnd-Angular /usr/share/nginx/html
+COPY --from=angular /app/dist/RentA-Car-FrontEnd-Angular .
 
 # Expose port 80
-EXPOSE 80
+# EXPOSE 80
 
 # Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
