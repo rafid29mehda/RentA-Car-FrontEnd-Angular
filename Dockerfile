@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image for the build stage
-FROM node:20-alpine as angular
+FROM node:20 as angular
 
 # Set the working directory in the container
 WORKDIR /app
