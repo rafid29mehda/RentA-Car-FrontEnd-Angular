@@ -20,14 +20,14 @@ COPY . .
 RUN npm run build
 
 # Use a smaller, production-ready Nginx image as the final image
-FROM httpd:alpine
-WORKDIR /usr/local/apache2/htdocs
+FROM nginx:alpine
 
 # Copy the production-ready Angular app to the Nginx webserver's root directory
-COPY --from=angular /app/dist/rent-acar-front-end .
+COPY --from=angular /usr/src/app/dist/rent-acar-front-end /usr/share/nginx/html
 
 # Expose port 80
-# EXPOSE 80
+EXPOSE 80
 
 # Start Nginx
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
+
